@@ -54,13 +54,16 @@ namespace dxvk {
     /* Far Cry 3: Assumes clear(0.5) on an UNORM  *
      * format to result in 128 on AMD and 127 on  *
      * Nvidia. We assume that the Vulkan drivers  *
-     * match the clear behaviour of D3D11.        */
+     * match the clear behaviour of D3D11.        *
+     * Intel needs to match the AMD result        */
     { R"(\\(farcry3|fc3_blooddragon)_d3d11\.exe$)", {{
       { "dxgi.hideNvidiaGpu",               "False" },
+      { "dxgi.hideIntelGpu",                "True" },
     }} },
-    /* Far Cry 4: Same as Far Cry 3               */
-    { R"(\\FarCry4\.exe$)", {{
+    /* Far Cry 4 and Primal: Same as Far Cry 3    */
+    { R"(\\(FarCry4|FCPrimal)\.exe$)", {{
       { "dxgi.hideNvidiaGpu",               "False" },
+      { "dxgi.hideIntelGpu",                "True" },
     }} },
     /* Frostpunk: Renders one frame with D3D9     *
      * after creating the DXGI swap chain         */
@@ -422,6 +425,11 @@ namespace dxvk {
     { R"(\\HoloCure\.exe$)", {{
       { "dxgi.useMonitorFallback",          "True" },
     }} },
+    /* Kenshi                                     *
+     * Helps CPU bound performance                */
+    { R"(\\kenshi_x64\.exe$)", {{
+      { "d3d11.cachedDynamicResources",     "v"    },
+    }} },
 
     /**********************************************/
     /* D3D9 GAMES                                 */
@@ -535,7 +543,7 @@ namespace dxvk {
       { "d3d9.customVendorId",              "1002" },
       { "dxgi.emulateUMA",                  "True" },
       { "d3d9.supportDFFormats",            "False" },
-      { "d3d9.deviceLostOnFocusLoss",       "True" },
+      { "d3d9.deviceLossOnFocusLoss",       "True" },
     }} },
     /* Battlefield 2 (bad z-pass)                 */
     { R"(\\BF2\.exe$)", {{
@@ -784,7 +792,7 @@ namespace dxvk {
     /* DC Universe Online                      *
      * Freezes after alt tabbing               */
     { R"(\\DCGAME\.EXE$)", {{
-      { "d3d9.deviceLostOnFocusLoss",       "True" },
+      { "d3d9.deviceLossOnFocusLoss",       "True" },
     }} },
     /* Halo Online                             *
      * Black textures                          */
@@ -832,6 +840,10 @@ namespace dxvk {
      * Works around alt tab OOM crash           */
     { R"(\\SkyDrift\.exe$)" , {{
       { "d3d9.allowDirectBufferMapping",    "False" },
+    }} },
+    /* Sonic CD                                */
+    { R"(\\soniccd\.exe$)", {{
+      { "d3d9.maxFrameRate",                "60" },
     }} },
 
     /**********************************************/
