@@ -11,7 +11,7 @@ compiler_args = [
   '-O3',
   '-march=x86-64-v3',
   '-ffp-contract=fast',
-  '-avx2',
+  '-mavx2',
   '-Wimplicit-fallthrough',
   # gcc
   '-Wno-missing-field-initializers',
