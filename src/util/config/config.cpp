@@ -27,10 +27,6 @@ namespace dxvk {
     { R"(\\EliteDangerous64\.exe$)", {{
       { "dxgi.customVendorId",              "10de" },
     }} },
-    /* The Vanishing of Ethan Carter Redux        */
-    { R"(\\EthanCarter-Win64-Shipping\.exe$)", {{
-      { "dxgi.customVendorId",              "10de" },
-    }} },
      /* EVE Online: Needs this to expose D3D12     *
      * otherwise D3D12 option on launcher is      *
      * greyed out                                 */
@@ -58,11 +54,13 @@ namespace dxvk {
      * Intel needs to match the AMD result        */
     { R"(\\(farcry3|fc3_blooddragon)_d3d11\.exe$)", {{
       { "dxgi.hideNvidiaGpu",               "False" },
+      { "dxgi.hideNvkGpu",                  "False" },
       { "dxgi.hideIntelGpu",                "True" },
     }} },
     /* Far Cry 4 and Primal: Same as Far Cry 3    */
     { R"(\\(FarCry4|FCPrimal)\.exe$)", {{
       { "dxgi.hideNvidiaGpu",               "False" },
+      { "dxgi.hideNvkGpu",                  "False" },
       { "dxgi.hideIntelGpu",                "True" },
     }} },
     /* Frostpunk: Renders one frame with D3D9     *
@@ -233,11 +231,6 @@ namespace dxvk {
     /* Nioh 2                                     */
     { R"(\\nioh2\.exe$)", {{
       { "dxgi.deferSurfaceCreation",        "True" },
-    }} },
-    /* DIRT 5 - uses amd_ags_x64.dll when it      *
-     * detects an AMD GPU                         */
-    { R"(\\DIRT5\.exe$)", {{
-      { "dxgi.customVendorId",              "10de" },
     }} },
     /* Crazy Machines 3 - crashes on long device  *
      * descriptions                               */
@@ -429,6 +422,14 @@ namespace dxvk {
      * Helps CPU bound performance                */
     { R"(\\kenshi_x64\.exe$)", {{
       { "d3d11.cachedDynamicResources",     "v"    },
+    }} },
+    /* Granblue Relink: Spams pixel shader UAVs   *
+     * and assumes that AMD GPUs do not expose    *
+     * native command lists for AGS usage         */
+    { R"(\\granblue_fantasy_relink\.exe$)", {{
+      { "d3d11.ignoreGraphicsBarriers",     "True"  },
+      { "d3d11.exposeDriverCommandLists",   "False" },
+      { "dxgi.hideNvidiaGpu",               "False" },
     }} },
 
     /**********************************************/
@@ -806,6 +807,7 @@ namespace dxvk {
      * Black textures                          */
     { R"(\\eldorado\.exe$)", {{
       { "d3d9.floatEmulation",              "Strict"   },
+      { "d3d9.allowDirectBufferMapping",    "False" },
     }} },
     /* Injustice: Gods Among Us                *
      * Locks a buffer that's still in use      */
@@ -862,13 +864,18 @@ namespace dxvk {
     { R"(\\UK Truck Simulator\\bin\\win_x86\\game\.exe$)", {{
       { "d3d9.floatEmulation",              "Strict" },
     }} },
-    /* Supreme Ruler Ultimate                    *
+    /* d3d9 Supreme Ruler games              *
      * Leaks a StateBlock leading                *
      * to Reset calls failing                    */
-    { R"(\\SupremeRulerUltimate\.exe$)", {{
+    { R"(\\SupremeRuler(Ultimate|GreatWar|1936|CW)\.exe$)", {{
       { "d3d9.countLosableResources",       "False" },
     }} },
-    
+    /* Operation Flashpoint: Red River           *
+     * Flickering issues                         */
+    { R"(\\RedRiver\.exe$)", {{
+      { "d3d9.floatEmulation",              "Strict" },
+    }} },
+
 
     /**********************************************/
     /* D3D12 GAMES (vkd3d-proton with dxvk dxgi)  */
@@ -878,6 +885,7 @@ namespace dxvk {
      * GPU unless dxgi Id match actual GPU Id  */
     { R"(\\Diablo IV\.exe$)", {{
       { "dxgi.hideNvidiaGpu",               "False"  },
+      { "dxgi.hideNvkGpu",                  "False"  },
     }} },
     /* WILD HEARTS™️                            *
      * D3D12 title using D3D11 device for      *
@@ -898,10 +906,6 @@ namespace dxvk {
      * optimization of that function is in Proton. */
     { R"(\\Cyberpunk2077\.exe$)", {{
       { "dxgi.useMonitorFallback",          "True" },
-    }} },
-    /* Hitman 3 - Ray Tracing                      */
-    { R"(\\HITMAN3\.exe$)", {{
-      { "dxgi.hideNvidiaGpu",              "False" },
     }} },
     /* Metro Exodus Enhanced Edition picks GPU adapters
      * by available VRAM, which causes issues on some
