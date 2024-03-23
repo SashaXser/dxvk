@@ -13,7 +13,8 @@ compiler_args = [
   '-march=x86-64-v3',
   '-ffp-contract=fast',
   '-mavx2',
-  '-flto',
+  '-flto', # Enable LTO
+  '-fprofile-generate',
   '-Wimplicit-fallthrough',
   # gcc
   '-Wno-missing-field-initializers',
@@ -25,10 +26,8 @@ compiler_args = [
   '-Wno-extern-c-compat',
   '-Wno-unused-const-variable',
   '-Wno-missing-braces',
-  '-fprofile-generate',
-  '-mllvm',
-  '-pgo-temporal-instrumentation',
 ]
+
 
 link_args = []
 
