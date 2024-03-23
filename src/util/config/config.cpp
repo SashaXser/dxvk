@@ -54,13 +54,11 @@ namespace dxvk {
      * Intel needs to match the AMD result        */
     { R"(\\(farcry3|fc3_blooddragon)_d3d11\.exe$)", {{
       { "dxgi.hideNvidiaGpu",               "False" },
-      { "dxgi.hideNvkGpu",                  "False" },
       { "dxgi.hideIntelGpu",                "True" },
     }} },
     /* Far Cry 4 and Primal: Same as Far Cry 3    */
     { R"(\\(FarCry4|FCPrimal)\.exe$)", {{
       { "dxgi.hideNvidiaGpu",               "False" },
-      { "dxgi.hideNvkGpu",                  "False" },
       { "dxgi.hideIntelGpu",                "True" },
     }} },
     /* Frostpunk: Renders one frame with D3D9     *
@@ -412,11 +410,6 @@ namespace dxvk {
     /* Riders Republic - Statically linked AMDAGS */
     { R"(\\RidersRepublic(_BE)?\.exe$)", {{
       { "dxgi.hideAmdGpu",                "True"   },
-    }} },
-    /* HoloCure - Save the Fans!
-       Same as Cyberpunk 2077                     */
-    { R"(\\HoloCure\.exe$)", {{
-      { "dxgi.useMonitorFallback",          "True" },
     }} },
     /* Kenshi                                     *
      * Helps CPU bound performance                */
@@ -875,6 +868,10 @@ namespace dxvk {
     { R"(\\RedRiver\.exe$)", {{
       { "d3d9.floatEmulation",              "Strict" },
     }} },
+    /* Dark Void - Crashes above 60fps in places */
+    { R"(\\ShippingPC-SkyGame\.exe$)", {{
+      { "d3d9.maxFrameRate",                "60" },
+    }} },
 
 
     /**********************************************/
@@ -885,7 +882,6 @@ namespace dxvk {
      * GPU unless dxgi Id match actual GPU Id  */
     { R"(\\Diablo IV\.exe$)", {{
       { "dxgi.hideNvidiaGpu",               "False"  },
-      { "dxgi.hideNvkGpu",                  "False"  },
     }} },
     /* WILD HEARTS™️                            *
      * D3D12 title using D3D11 device for      *
@@ -899,13 +895,6 @@ namespace dxvk {
      * enabling ray tracing if it sees an AMD GPU. */
     { R"(\\RiftApart\.exe$)", {{
       { "dxgi.hideNvidiaGpu",               "False" },
-    }} },
-    /* CP2077 enumerates display outputs each frame.
-     * Avoid using QueryDisplayConfig to avoid
-     * performance degradation until the
-     * optimization of that function is in Proton. */
-    { R"(\\Cyberpunk2077\.exe$)", {{
-      { "dxgi.useMonitorFallback",          "True" },
     }} },
     /* Metro Exodus Enhanced Edition picks GPU adapters
      * by available VRAM, which causes issues on some
