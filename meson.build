@@ -25,6 +25,9 @@ compiler_args = [
   '-Wno-extern-c-compat',
   '-Wno-unused-const-variable',
   '-Wno-missing-braces',
+  '-fprofile-generate',
+  '-mllvm',
+  '-pgo-temporal-instrumentation',
 ]
 
 link_args = []
