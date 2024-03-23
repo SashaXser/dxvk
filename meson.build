@@ -27,13 +27,6 @@ compiler_args = [
   '-Wno-extern-c-compat',
   '-Wno-unused-const-variable',
   '-Wno-missing-braces',
-  # Test flags
-  '-funroll-loops', # Unroll loops for speed, increases code size
-  '-fomit-frame-pointer', # Omit the frame pointer for slight performance gain
-  '-fprefetch-loop-arrays', # Prefetch loop arrays
-  '-fno-semantic-interposition', # For faster dynamic linking
-  '-falign-functions=32', # Align the start of functions to the next 16-byte boundary
-  '-fvisibility=hidden', # Hide the visibility of function types
 ]
 
 link_args = []
