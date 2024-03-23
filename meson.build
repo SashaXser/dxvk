@@ -14,8 +14,6 @@ compiler_args = [
   '-ffp-contract=fast',
   '-mavx2',
   '-flto',
-  '-fno-plt',
-  '-ffat-lto-objects',
   '-Wimplicit-fallthrough',
   # gcc
   '-Wno-missing-field-initializers',
