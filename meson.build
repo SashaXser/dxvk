@@ -13,8 +13,7 @@ compiler_args = [
   '-march=x86-64-v3',
   '-ffp-contract=fast',
   '-mavx2',
-  '-flto', # Enable LTO
-  '-fprofile-generate',
+  '-flto',
   '-Wimplicit-fallthrough',
   # gcc
   '-Wno-missing-field-initializers',
@@ -26,8 +25,13 @@ compiler_args = [
   '-Wno-extern-c-compat',
   '-Wno-unused-const-variable',
   '-Wno-missing-braces',
+  # Test flags
+  '-funroll-loops', # Unroll loops for speed, increases code size
+  '-fprefetch-loop-arrays', # Prefetch loop arrays
+  '-fno-semantic-interposition', # For faster dynamic linking
+  '-falign-functions=16', # Align the start of functions to the next 16-byte boundary
+  '-fvisibility=hidden', # Hide the visibility of function types
 ]
-
 
 link_args = []
 
