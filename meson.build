@@ -13,7 +13,9 @@ compiler_args = [
   '-march=x86-64-v3',
   '-ffp-contract=fast',
   '-mfpmath=sse',
-  '-mavx2',
+  '-sse4',
+  '-flto',
+  '-ffp-contract=fast',
   '-mtune=skylake',
   '-Wimplicit-fallthrough',
   # gcc
