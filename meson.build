@@ -10,11 +10,9 @@ dxvk_is_msvc = cpp.get_argument_syntax() == 'msvc'
 
 compiler_args = [
   '-O3',
-  '-march=x86-64-v3',
-  '-ffp-contract=fast',
-  '-flto',
-  '-ffp-contract=fast',
-  '-mtune=skylake',
+  '-msse3',
+  '-msse4',
+  '-mfpmath=sse',
   '-Wimplicit-fallthrough',
   # gcc
   '-Wno-missing-field-initializers',
