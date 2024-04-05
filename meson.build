@@ -12,7 +12,6 @@ compiler_args = [
   '-O3',
   '-march=x86-64-v3',
   '-ffp-contract=fast',
-  '-mfpmath=sse',
   '-flto',
   '-ffp-contract=fast',
   '-mtune=skylake',
