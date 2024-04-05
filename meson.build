@@ -14,6 +14,7 @@ compiler_args = [
   '-ffp-contract=fast',
   '-mavx2',
   '-flto',
+  '-mtune=skylake',
   '-Wimplicit-fallthrough',
   # gcc
   '-Wno-missing-field-initializers',
