@@ -12,7 +12,10 @@ compiler_args = [
   '-O3',
   '-msse3',
   '-msse4',
+  '-mavx2',
   '-mfpmath=sse',
+  '-mtune=skylake',
+  '-ffp-contract=fast',
   '-Wimplicit-fallthrough',
   # gcc
   '-Wno-missing-field-initializers',
