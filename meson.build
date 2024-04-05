@@ -11,9 +11,9 @@ dxvk_is_msvc = cpp.get_argument_syntax() == 'msvc'
 compiler_args = [
   '-O3',
   '-march=x86-64-v3',
+  '-ffp-contract=fast',
   '-mfpmath=sse',
   '-mavx2',
-  '-flto',
   '-mtune=skylake',
   '-Wimplicit-fallthrough',
   # gcc
