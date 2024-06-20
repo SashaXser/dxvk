@@ -4,7 +4,7 @@ on: [push, pull_request, workflow_dispatch]
 
 jobs:
   artifacts-mingw-w64:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
 
     steps:
     - name: Checkout code
@@ -13,6 +13,13 @@ jobs:
       with:
         submodules: recursive
         fetch-depth: 0
+
+    - name: Cache build dependencies
+      id: cache-deps
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache
+        key: ${{ runner.os }}-build-${{ hashFiles('**/package-release.sh') }}
 
     - name: Setup problem matcher
       uses: Joshua-Ashton/gcc-problem-matcher@v3
@@ -35,7 +42,7 @@ jobs:
         if-no-files-found: error
 
   artifacts-steamrt-sniper:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     container: registry.gitlab.steamos.cloud/steamrt/sniper/sdk:beta
 
     steps:
@@ -45,6 +52,13 @@ jobs:
       with:
         submodules: recursive
         fetch-depth: 0
+
+    - name: Cache build dependencies
+      id: cache-deps
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache
+        key: ${{ runner.os }}-build-${{ hashFiles('**/package-native.sh') }}
 
     - name: Setup problem matcher
       uses: Joshua-Ashton/gcc-problem-matcher@v3
@@ -66,7 +80,7 @@ jobs:
         if-no-files-found: error
 
   merge-artifacts:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     needs: [artifacts-mingw-w64, artifacts-steamrt-sniper]
     steps:
       - name: Get version
