@@ -13,6 +13,7 @@ compiler_args = [
   '-O3',
   '-msse3',
   '-msse4',
+  '-march=skylake',
   '-mfpmath=sse',
   '-mtune=skylake',
   '-ffp-contract=fast',
