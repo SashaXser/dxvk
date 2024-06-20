@@ -14,13 +14,6 @@ jobs:
         submodules: recursive
         fetch-depth: 0
 
-    - name: Cache build dependencies
-      id: cache-deps
-      uses: actions/cache@v3
-      with:
-        path: ~/.cache
-        key: ${{ runner.os }}-build-${{ hashFiles('**/package-release.sh') }}
-
     - name: Setup problem matcher
       uses: Joshua-Ashton/gcc-problem-matcher@v3
 
@@ -52,13 +45,6 @@ jobs:
       with:
         submodules: recursive
         fetch-depth: 0
-
-    - name: Cache build dependencies
-      id: cache-deps
-      uses: actions/cache@v3
-      with:
-        path: ~/.cache
-        key: ${{ runner.os }}-build-${{ hashFiles('**/package-native.sh') }}
 
     - name: Setup problem matcher
       uses: Joshua-Ashton/gcc-problem-matcher@v3
