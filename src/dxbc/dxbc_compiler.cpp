@@ -257,13 +257,12 @@ namespace dxvk {
     info.outputMask = m_outputMask;
     info.uniformSize = m_immConstData.size();
     info.uniformData = m_immConstData.data();
+    info.pushConstStages = VK_SHADER_STAGE_FRAGMENT_BIT;
+    info.pushConstSize = sizeof(DxbcPushConstants);
     info.outputTopology = m_outputTopology;
 
     if (m_programInfo.type() == DxbcProgramType::HullShader)
       info.patchVertexCount = m_hs.vertexCountIn;
-
-    if (m_programInfo.type() == DxbcProgramType::PixelShader && m_ps.pushConstantId)
-      info.pushConstSize = sizeof(DxbcPushConstants);
 
     if (m_moduleInfo.xfb) {
       info.xfbRasterizedStream = m_moduleInfo.xfb->rasterizedStream;
@@ -1624,8 +1623,13 @@ namespace dxvk {
       
       case DxbcOpcode::Mad:
       case DxbcOpcode::DFma:
-        dst.id = m_module.opFFma(typeId,
-          src.at(0).id, src.at(1).id, src.at(2).id);
+        if (likely(!m_moduleInfo.options.longMad)) {
+          dst.id = m_module.opFFma(typeId,
+            src.at(0).id, src.at(1).id, src.at(2).id);
+        } else {
+          dst.id = m_module.opFMul(typeId, src.at(0).id, src.at(1).id);
+          dst.id = m_module.opFAdd(typeId, dst.id, src.at(2).id);
+        }
         break;
       
       case DxbcOpcode::Max:
@@ -5513,12 +5517,12 @@ namespace dxvk {
     result.type.ctype  = DxbcScalarType::Uint32;
     result.type.ccount = 1;
     
-    if (info.image.sampled == 1) {
+    if (info.image.ms == 0 && info.image.sampled == 1) {
       result.id = m_module.opImageQueryLevels(
         getVectorTypeId(result.type),
         m_module.opLoad(info.typeId, info.varId));
     } else {
-      // Report one LOD in case of UAVs
+      // Report one LOD in case of UAVs or multisampled images
       result.id = m_module.constu32(1);
     }
 
@@ -7728,6 +7732,21 @@ namespace dxvk {
     return DxbcRegMask::firstN(getTexCoordDim(imageType));
   }
   
+
+  bool DxbcCompiler::ignoreInputSystemValue(DxbcSystemValue sv) const {
+    switch (sv) {
+      case DxbcSystemValue::Position:
+      case DxbcSystemValue::IsFrontFace:
+      case DxbcSystemValue::SampleIndex:
+      case DxbcSystemValue::PrimitiveId:
+      case DxbcSystemValue::Coverage:
+        return m_programInfo.type() == DxbcProgramType::PixelShader;
+
+      default:
+        return false;
+    }
+  }
+
   
   DxbcVectorType DxbcCompiler::getInputRegType(uint32_t regIdx) const {
     switch (m_programInfo.type()) {
@@ -7758,8 +7777,25 @@ namespace dxvk {
         result.ctype  = DxbcScalarType::Float32;
         result.ccount = 4;
 
-        if (m_isgn->findByRegister(regIdx))
-          result.ccount = m_isgn->regMask(regIdx).minComponents();
+        if (m_isgn == nullptr || !m_isgn->findByRegister(regIdx))
+          return result;
+
+        DxbcRegMask mask(0u);
+        DxbcRegMask used(0u);
+
+        for (const auto& e : *m_isgn) {
+          if (e.registerId == regIdx && !ignoreInputSystemValue(e.systemValue)) {
+            mask |= e.componentMask;
+            used |= e.componentUsed;
+          }
+        }
+
+        if (m_programInfo.type() == DxbcProgramType::PixelShader) {
+          if ((used.raw() & mask.raw()) == used.raw())
+            mask = used;
+        }
+
+        result.ccount = mask.minComponents();
         return result;
       }
     }
